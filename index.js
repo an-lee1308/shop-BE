@@ -1,17 +1,30 @@
-var express = require('express');
+const express = require("express");
+const path = require("path");
+const logger = require("morgan");
+// const cors = require("cors");
+
+var DB = require("./configdb"); // import file config database
 require("dotenv").config();
+//connect database;
+DB.ConfigDB();
+const app = express();
 
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//     optionsSuccessStatus: 200,
+//     credentials: true,
+//   })
+// );
 
-var app = express();
-
-const port = process.env.PORT;
-
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors())
+app.use(express.static(path.join(__dirname, "public")));
+// app.use(cors())
+
+const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
-  console.log("Server đã chạy trên port: " + port);
-})
+  console.log(`Server đã chạy trên port ${port}`);
+});
