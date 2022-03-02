@@ -2,10 +2,12 @@ const UserModel = require("../model/UserModel");
 const bcrypt = require("bcrypt");
 const randomstring = require("randomstring");
 const sendmail = require("../helpers/sendmail");
+const jwt = require("../helpers/jwt");
 require("dotenv").config();
 
 const saltRounds = 10;
-const { url_verifyEmail } = process.env;
+const { TIME_SECRET, SECRETKEY, url_verifyEmail, url_changePassord } =
+  process.env;
 
 module.exports = {
   registerUser: async (req, res) => {
@@ -59,6 +61,43 @@ module.exports = {
       return res.json({
         statusCode: 404,
         msg: err,
+      });
+    }
+  },
+  loginUser: async (req, res) => {
+    const { username, password } = req.body;
+    try {
+      const checkUsername = await UserModel.findOne({
+        username,
+      });
+      if (!checkUsername.enable) {
+        return res.json({
+          statusCode: 404,
+          msg: "Tài khoản chưa được kích hoạt vui lòng đăng nhập vào gmail để kích hoạt",
+        });
+      }
+      if (bcrypt.compareSync(password, checkUsername.password)) {
+        const token = await jwt.generateToken(
+          checkUsername,
+          SECRETKEY,
+          TIME_SECRET
+        );
+        return res.json({
+          statusCode: 200,
+          jwt: token,
+          msg: "Đăng nhập thành công",
+        });
+      } else {
+        return res.json({
+          statusCode: 404,
+          msg: "Mật khẩu không chính xác! vui lòng nhập lại mật khẩu",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      res.json({
+        statusCode: 403,
+        msg: "Tài khoản không tồn tại",
       });
     }
   },
