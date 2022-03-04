@@ -101,4 +101,18 @@ module.exports = {
       });
     }
   },
+  verifyCode: async (req, res) => {
+    const { code } = req.params;
+    try {
+      const user = await UserModel.findOne({
+        verificationcode: code,
+      });
+
+      user.enable = true;
+      await user.save();
+      res.send("<h1 style='text-align:center'>Kích hoạt thành công</h1>");
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
 };
