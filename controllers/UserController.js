@@ -115,4 +115,26 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+
+  getUser: async (req, res) => {
+    const { _id } = req.user.data;
+    try {
+      const user = await UserModel.findById(_id);
+      res.json({
+        username: user.username,
+        name: user.name,
+        phone: user.phone,
+        email: user.email,
+        image: user.image,
+        role: user.role,
+        ngaysinh: user.ngaysinh,
+        sex: user.sex,
+        enable: user.enable,
+        id: user.id,
+        statusCode: 200,
+      });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
 };
