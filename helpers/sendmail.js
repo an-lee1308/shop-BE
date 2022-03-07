@@ -34,7 +34,33 @@ async function VerifyEmail(emailUser, url) {
         `, // html bod
   });
 }
+async function ChangePassword(emailUser, url) {
+  let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: email_username, // generated ethereal user
+      pass: email_password, // generated ethereal password
+    },
+  });
+
+  // send mail with defined transport object
+  let info = await transporter.sendMail({
+    from: '"example 👻" <nhoxbuonlv3@example.com>', // sender address
+    to: emailUser,
+    subject: "Thay đổi mật khẩu", // Subject line
+    html: `
+            <div style="max-width: 700px; margin:40px auto; border: 1px solid #ddd; padding: 50px 20px; font-size: 110%; border-radius: 10px;">
+            <h2 style="text-align: center; text-transform: uppercase;color: teal;">THAY ĐỔI MẬT KHẨU VỚI G8 Shop</h2>
+            <p>Nhấn vào link dưới đây để thay đổi mật khẩu của bạn</p>
+            <a href=${url} style="background: crimson; text-decoration: none; color: white; padding: 10px 20px; margin: 10px auto; display: block; border-radius: 20px; width: 260px; text-align: center;">Verify</a>
+            </div>
+        `, // html body
+  });
+}
 
 module.exports = {
   VerifyEmail,
+  ChangePassword,
 };

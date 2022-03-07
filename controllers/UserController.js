@@ -137,4 +137,68 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+  forgetPassword: async (req, res) => {
+    const { email } = req.body;
+    try {
+      const user = await UserModel.findOne({
+        email,
+      });
+      if (user) {
+        user.forgotpassword = await jwt.generateToken(
+          user,
+          SECRETKEY,
+          TIME_SECRET
+        );
+        await user.save();
+        sendmail.ChangePassword(email, url_changePassord + user.forgotpassword);
+        return res.json({
+          status: 200,
+          msg: "Vui lòng đăng nhập vào gmail để thay đổi password",
+        });
+      } else {
+        return res.json({
+          status: 404,
+          msg: "Tài khoản email chưa được đăng ký",
+        });
+      }
+    } catch (err) {
+      return res.json({
+        status: 404,
+        msg: "Có lỗi trong quá trình ! vui lòng thử lại",
+      });
+    }
+  },
+  checkTokenValid: async (req, res) => {
+    const { token } = req.params;
+    try {
+      const UserJwt = await jwt.verifyToken(token, SECRETKEY);
+      return res.json({
+        status: 200,
+      });
+    } catch (err) {
+      return res.json({
+        status: 404,
+      });
+    }
+  },
+  forgotChangePassword: async (req, res) => {
+    const { id } = req.params;
+    const { password } = req.body;
+
+    try {
+      const UserJwt = await jwt.verifyToken(id, SECRETKEY);
+      const user = await UserModel.findById(UserJwt.data._id);
+      const HashPassword = bcrypt.hashSync(password, saltRounds);
+      user.password = HashPassword;
+      await user.save();
+      return res.json({
+        status: 200,
+      });
+    } catch (err) {
+      return res.json({
+        status: 500,
+        msg: err,
+      });
+    }
+  },
 };
