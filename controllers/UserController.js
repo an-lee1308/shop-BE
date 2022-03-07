@@ -201,4 +201,33 @@ module.exports = {
       });
     }
   },
+  updateUser: async (req, res) => {
+    const { _id } = req.user.data;
+    const { phone, sex, ngaysinh, currentPassword, newPassword, name } =
+      req.body;
+    const user = await UserModel.findById(_id);
+    console.log(req.file);
+    if (req.file) {
+      user.image = "http://localhost:8080/image/" + req.file.originalname;
+    }
+    if (currentPassword || newPassword) {
+      if (bcrypt.compareSync(currentPassword, user.password)) {
+        user.password = bcrypt.hashSync(newPassword, saltRounds);
+      } else {
+        return res.json({
+          msg: "Password hiện tại chưa đúng",
+          statusCode: 404,
+        });
+      }
+    }
+    user.phone = phone;
+    user.sex = sex;
+    user.ngaysinh = ngaysinh;
+    user.name = name;
+    user.save();
+    return res.json({
+      msg: "Cập nhật tài khoản thành công",
+      statusCode: 200,
+    });
+  },
 };
