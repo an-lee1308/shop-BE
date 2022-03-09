@@ -205,4 +205,58 @@ module.exports = {
           : parseInt(totalProduct.length / 15) + 1,
     });
   },
+  getProductById: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const product = await ProductModel.findById(id);
+      res.json(product);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  postComment: async (req, res) => {
+    const { start, content } = req.body;
+    // id product
+    const { id } = req.params;
+    // id user
+    const { _id } = req.user.data;
+    try {
+      const user1 = await User.findById(_id);
+      // console.log(user1)
+      const newComment = new CommentModel({
+        user: user1,
+        start,
+        content,
+      });
+      const temp = await newComment.save();
+      // console.log(temp);
+      const product = await ProductModel.findById(id);
+      console.log(product);
+      product.comment.push(temp);
+      const newproduct = await product.save();
+      return res.json(newproduct);
+    } catch (err) {
+      res.json(err);
+    }
+  },
+  getComment: async (req, res) => {
+    // id product
+    const { id } = req.params;
+    let { page } = req.query;
+    page = page ? page : 1;
+    const cmtproduct = await ProductModel.findById(id);
+    return res.json({
+      listComment: cmtproduct.comment,
+      totalPage: parseInt(cmtproduct.comment.length / 10) + 1,
+      commentPerPage:
+        page == 1
+          ? cmtproduct.comment.length < 10
+            ? cmtproduct.comment.length
+            : 10
+          : cmtproduct.comment.length < page * 10
+          ? cmtproduct.comment.length - 10 * (page - 1)
+          : 10,
+      totalComment: cmtproduct.comment.length,
+    });
+  },
 };
