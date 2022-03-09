@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const logger = require("morgan");
-
+const ProductRouter = require("./routes/ProductRouter");
 const UserRouter = require("./routes/UserRouter");
 // const cors = require("cors");
 
@@ -27,6 +27,7 @@ app.use(express.static(path.join(__dirname, "public")));
 const port = process.env.PORT || 8000;
 
 app.use("/api/auth", UserRouter);
+app.use("/api", ProductRouter);
 app.get("/", function (req, res) {
   res.send("Hello World");
 });
