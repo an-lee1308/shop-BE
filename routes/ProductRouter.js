@@ -16,4 +16,9 @@ Router.post(
   ProductController.postComment
 );
 Router.get("/detailproducts/:id/comment", ProductController.getComment);
+Router.post(
+  "/detailproducts/:id/reply/:idcomment",
+  Authentication.isUserValid,
+  ProductController.postReply
+);
 module.exports = Router;

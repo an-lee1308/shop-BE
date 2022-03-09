@@ -259,4 +259,39 @@ module.exports = {
       totalComment: cmtproduct.comment.length,
     });
   },
+  postReply: async (req, res) => {
+    const { content } = req.body;
+    // id product
+    const { id } = req.params;
+    const { idcomment } = req.params;
+    // id user
+    const { _id } = req.user.data;
+    try {
+      const user1 = await User.findById(_id);
+      // console.log(user1)
+      // const comment=await CommentModel.findById(idcomment);
+      // comment.reply.push({
+      //     user:user1,
+      //     content
+      // });
+      // const temp = await comment.save();
+      const product = await ProductModel.findById(id);
+      for (let i = 0; i < product.comment.length; i++) {
+        if (product.comment[i]._id == idcomment) {
+          product.comment[i].reply.push({
+            user: user1,
+            content,
+            createdBy: Date.now(),
+          });
+          break;
+        }
+        console.log(idcomment);
+        console.log(product.comment[i]._id);
+      }
+      const newproduct = await product.save();
+      return res.json(newproduct);
+    } catch (err) {
+      res.json(err);
+    }
+  },
 };
