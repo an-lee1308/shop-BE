@@ -1,5 +1,6 @@
 const express = require("express");
 const Router = express.Router();
+const Auth = require("../middleware/Auth");
 const UserController = require("../controllers/UserController");
 
 var multer = require("multer");
@@ -20,6 +21,8 @@ Router.post("/forgot", UserController.forgetPassword);
 Router.get("/forgot/:token", UserController.checkTokenValid);
 Router.post("/forgot/:id", UserController.forgotChangePassword);
 
+Router.get("/users", Auth.isAdmin, UserController.getAllUser);
+Router.delete("/user", Auth.isAdmin, UserController.deleteUser);
 Router.get("/user", Auth.isUserValid, UserController.getUser);
 Router.post(
   "/user/update",

@@ -230,4 +230,16 @@ module.exports = {
       statusCode: 200,
     });
   },
+  getAllUser: async (req, res) => {
+    return res.json(await UserModel.find({}));
+  },
+  deleteUser: async (req, res) => {
+    const { id } = req.body;
+    try {
+      await UserModel.findByIdAndRemove(id);
+      return res.json("Thành công");
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  },
 };
