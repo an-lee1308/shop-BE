@@ -2,6 +2,22 @@ const express = require("express");
 const Router = express.Router();
 const ProductController = require("../controllers/ProductController");
 const Authentication = require("../middleware/Auth");
+
+var multer = require("multer");
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./public/image/product");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+var upload = multer({ storage });
+var productUpload = upload.fields([
+  { name: "image", maxCount: 1 },
+  { name: "listimage", maxCount: 8 },
+]);
+
 Router.get(
   "/admin/products",
   Authentication.isAdmin,
@@ -20,5 +36,11 @@ Router.post(
   "/detailproducts/:id/reply/:idcomment",
   Authentication.isUserValid,
   ProductController.postReply
+);
+Router.post(
+  "/product",
+  productUpload,
+  Authentication.isAdmin,
+  ProductController.createProduct
 );
 module.exports = Router;

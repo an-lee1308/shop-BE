@@ -294,4 +294,37 @@ module.exports = {
       res.json(err);
     }
   },
+  createProduct: async (req, res) => {
+    const { quantity, newprice, oldprice, type, category, content, title } =
+      req.body;
+    var image, ListImage;
+    if (req.files) {
+      if (req.files.image) {
+        image =
+          "http://localhost:8080/image/product/" +
+          req.files.image[0].originalname;
+      }
+      if (req.files.listimage) {
+        ListImage = req.files.listimage.map(
+          (item) => `http://localhost:8080/image/product/${item.originalname}`
+        );
+      }
+    }
+    try {
+      const product = new ProductModel({
+        quantity,
+        newprice,
+        oldprice,
+        type,
+        category,
+        title,
+        content,
+        image,
+        ListImage,
+      });
+      return res.json(await product.save());
+    } catch (err) {
+      return res.json(err);
+    }
+  },
 };
