@@ -359,6 +359,17 @@ module.exports = {
       }
       console.log(12345);
       return res.json(await product.save());
-    } catch (err) {}
+    } catch (err) {
+      return res.json(err);
+    }
+  },
+  deleteProduct: async (req, res) => {
+    const { id } = req.body;
+    try {
+      await ProductModel.findByIdAndRemove(id);
+      return res.json("Thành công");
+    } catch (err) {
+      return res.json(err);
+    }
   },
 };

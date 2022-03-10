@@ -49,4 +49,9 @@ Router.put(
   Authentication.isAdmin,
   ProductController.updateProduct
 );
+Router.delete(
+  "/product",
+  Authentication.isAdmin,
+  ProductController.deleteProduct
+);
 module.exports = Router;
