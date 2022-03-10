@@ -43,4 +43,10 @@ Router.post(
   Authentication.isAdmin,
   ProductController.createProduct
 );
+Router.put(
+  "/product",
+  productUpload,
+  Authentication.isAdmin,
+  ProductController.updateProduct
+);
 module.exports = Router;
