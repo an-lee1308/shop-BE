@@ -14,5 +14,15 @@ Router.post(
   OrderController.paymentOnline
 );
 Router.get("/order", Authentication.isUserValid, OrderController.getOrder);
+Router.delete(
+  "/order",
+  Authentication.isUserValid,
+  OrderController.deleteOrder
+);
+Router.post(
+  "/order/cancel",
+  Authentication.isUserValid,
+  OrderController.cancelOrder
+);
 
 module.exports = Router;

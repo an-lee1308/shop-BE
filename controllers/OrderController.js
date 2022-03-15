@@ -41,4 +41,44 @@ module.exports = {
     const order = await OrderModel.find({ id_user: _id });
     return res.json(order);
   },
+  deleteOrder: async (req, res) => {
+    const { _id } = req.body; // id Order
+    const idUser = req.user.data._id; // id User
+    try {
+      const Order = await OrderModel.findOneAndDelete({
+        id_user: idUser,
+        _id,
+      });
+      return res.json({
+        statusCode: 200,
+        msg: "Đã xóa đơn hàng",
+      });
+    } catch (err) {
+      return res.json({
+        statusCode: 404,
+        msg: err,
+      });
+    }
+  },
+  cancelOrder: async (req, res) => {
+    const { _id } = req.body; // id Order
+    const idUser = req.user.data._id; // id User
+    try {
+      const Order = await OrderModel.findOne({
+        id_user: idUser,
+        _id,
+      });
+      Order.cancelreason = "0";
+      await Order.save();
+      return res.json({
+        statusCode: 200,
+        msg: "Đã hủy đơn hàng",
+      });
+    } catch (err) {
+      return res.json({
+        statusCode: 404,
+        msg: err,
+      });
+    }
+  },
 };
