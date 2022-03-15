@@ -1,5 +1,5 @@
 const OrderModel = require("../model/OrderModel");
-require("dotenv").config();
+const ProductModel = require("../model/ProductModel");
 
 module.exports = {
   // handle payment offline
