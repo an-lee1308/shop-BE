@@ -81,4 +81,31 @@ module.exports = {
       });
     }
   },
+  getAllOrder: async (req, res) => {
+    return res.json(await OrderModel.find({}));
+  },
+  acceptOrder: async (req, res) => {
+    const { _id } = req.body;
+    try {
+      const order = await OrderModel.findById(_id);
+      order.products.forEach(async (item) => {
+        const product = await ProductModel.findById(item._id);
+        if (product.quantity != 0) {
+          product.quantity--;
+        }
+        await product.save();
+      });
+      order.status_order = true;
+      await order.save();
+      return res.json({
+        statusCode: 200,
+        msg: "Duyệt đơn hàng thành công",
+      });
+    } catch (err) {
+      return res.json({
+        statusCode: 404,
+        msg: "Duyệt đơn hàng thất bại ",
+      });
+    }
+  },
 };

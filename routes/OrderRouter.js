@@ -24,5 +24,11 @@ Router.post(
   Authentication.isUserValid,
   OrderController.cancelOrder
 );
+Router.get("/orders", Authentication.isAdmin, OrderController.getAllOrder);
+Router.post(
+  "/order/accept",
+  Authentication.isAdmin,
+  OrderController.acceptOrder
+);
 
 module.exports = Router;
