@@ -8,5 +8,11 @@ Router.post(
   Authentication.isUserValid,
   OrderController.paymentOffline
 );
+Router.post(
+  "/payment/create",
+  Authentication.isUserValid,
+  OrderController.paymentOnline
+);
+Router.get("/order", Authentication.isUserValid, OrderController.getOrder);
 
 module.exports = Router;
