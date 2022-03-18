@@ -248,14 +248,7 @@ module.exports = {
     return res.json({
       listComment: cmtproduct.comment,
       totalPage: parseInt(cmtproduct.comment.length / 10) + 1,
-      commentPerPage:
-        page == 1
-          ? cmtproduct.comment.length < 10
-            ? cmtproduct.comment.length
-            : 10
-          : cmtproduct.comment.length < page * 10
-          ? cmtproduct.comment.length - 10 * (page - 1)
-          : 10,
+      commentPerPage: 10,
       totalComment: cmtproduct.comment.length,
     });
   },
@@ -268,13 +261,13 @@ module.exports = {
     const { _id } = req.user.data;
     try {
       const user1 = await User.findById(_id);
-      // console.log(user1)
-      // const comment=await CommentModel.findById(idcomment);
-      // comment.reply.push({
-      //     user:user1,
-      //     content
-      // });
-      // const temp = await comment.save();
+      console.log(user1);
+      const comment = await CommentModel.findById(idcomment);
+      comment.reply.push({
+        user: user1,
+        content,
+      });
+      const temp = await comment.save();
       const product = await ProductModel.findById(id);
       for (let i = 0; i < product.comment.length; i++) {
         if (product.comment[i]._id == idcomment) {

@@ -150,7 +150,10 @@ module.exports = {
           TIME_SECRET
         );
         await user.save();
-        sendmail.ChangePassword(email, url_changePassord + user.forgotpassword);
+        sendmail.ChangePassword(
+          email,
+          url_changePassword + user.forgotpassword
+        );
         return res.json({
           status: 200,
           msg: "Vui lòng đăng nhập vào gmail để thay đổi password",

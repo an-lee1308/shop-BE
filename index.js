@@ -5,7 +5,7 @@ var cookieParser = require("cookie-parser");
 const ProductRouter = require("./routes/ProductRouter");
 const UserRouter = require("./routes/UserRouter");
 const OrderRouter = require("./routes/OrderRouter");
-// const cors = require("cors");
+const cors = require("cors");
 
 var DB = require("./configdb"); // import file config database
 require("dotenv").config();
@@ -25,14 +25,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-// app.use(cors())
+app.use(cors());
 
 const port = process.env.PORT || 8000;
 
 app.use("/api/auth", UserRouter);
 app.use("/api", ProductRouter);
 app.use("/api/auth", OrderRouter);
-
+app.get("/", (req, res) => {
+  res.send("hello world");
+});
 app.listen(port, () => {
   console.log(`Server đã chạy trên port ${port}`);
 });
