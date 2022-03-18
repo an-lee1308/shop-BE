@@ -294,12 +294,13 @@ module.exports = {
     if (req.files) {
       if (req.files.image) {
         image =
-          "http://localhost:8080/image/product/" +
+          "https://radiant-wave-89582.herokuapp.com/image/product/" +
           req.files.image[0].originalname;
       }
       if (req.files.listimage) {
         ListImage = req.files.listimage.map(
-          (item) => `http://localhost:8080/image/product/${item.originalname}`
+          (item) =>
+            `https://radiant-wave-89582.herokuapp.com/image/product/${item.originalname}`
         );
       }
     }
@@ -327,12 +328,13 @@ module.exports = {
     if (req.files) {
       if (req.files.image) {
         image =
-          "http://localhost:8080/image/product/" +
+          "https://radiant-wave-89582.herokuapp.com/image/product/" +
           req.files.image[0].originalname;
       }
       if (req.files.listimage) {
         ListImage = req.files.listimage.map(
-          (item) => `http://localhost:8080/image/product/${item.originalname}`
+          (item) =>
+            `https://radiant-wave-89582.herokuapp.com/image/product/${item.originalname}`
         );
       }
     }

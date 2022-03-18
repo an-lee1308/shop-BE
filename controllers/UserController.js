@@ -211,7 +211,9 @@ module.exports = {
     const user = await UserModel.findById(_id);
     console.log(req.file);
     if (req.file) {
-      user.image = "http://localhost:8080/image/" + req.file.originalname;
+      user.image =
+        "https://radiant-wave-89582.herokuapp.com/image/" +
+        req.file.originalname;
     }
     if (currentPassword || newPassword) {
       if (bcrypt.compareSync(currentPassword, user.password)) {
