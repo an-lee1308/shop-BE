@@ -6,7 +6,7 @@ const jwt = require("../helpers/jwt");
 require("dotenv").config();
 
 const saltRounds = 10;
-const { TIME_SECRET, SECRETKEY, url_verifyEmail, url_changePassord } =
+const { TIME_SECRET, SECRETKEY, url_verifyEmail, url_changePassword } =
   process.env;
 
 module.exports = {
